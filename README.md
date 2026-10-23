@@ -1,155 +1,110 @@
 # gtfm: Green Team Field Manual
 
-Small PowerShell tools for Windows PCs. Each tool does one job. Each tool
-runs with one line.
+Small PowerShell tools for Windows PCs. One job each. One line to run.
 
-| Tool | Does | Changes the PC | Runs |
+| Tool | Meaning | Changes PC | Runs |
 |---|---|---|---|
-| [etch](#etch) | **E**tch **T**ags **C**omputers' **H**ostnames. A safe way to get a readable, unique hostname | No | ![](https://img.shields.io/github/downloads/devinscodex/gtfm/etch-v1.0.0/etch.ps1?label=runs&color=lightgrey) |
-| [shed](#shed) (pre-release) | **S**hed **H**elps **E**mpty **D**isks. Frees disk space after a restore point and a health check | Yes, after you answer `y` | ![](https://img.shields.io/github/downloads/devinscodex/gtfm/shed-v0.9.0/shed.ps1?label=runs&color=lightgrey) |
+| [etch](#etch) | **E**tch **T**ags **C**omputers' **H**ostnames | No | ![](https://img.shields.io/github/downloads/devinscodex/gtfm/etch-v1.0.0/etch.ps1?label=runs&color=lightgrey) |
+| [shed](#shed) (pre-release) | **S**hed **H**elps **E**mpty **D**isks | Yes, after `y` | ![](https://img.shields.io/github/downloads/devinscodex/gtfm/shed-v0.9.0/shed.ps1?label=runs&color=lightgrey) |
 
 ## Rules
 
-- A tool reads the PC and prints. It changes nothing unless its row above
-  says so. A tool that changes the PC shows a plan first and asks.
-- A tool sends no data off the PC. If a tool fails, it prints a report link.
-  Nothing is sent unless you open the link and submit it.
-- A tool runs on Windows PowerShell 5.1 and on PowerShell 7.
-- Every run line points to a fixed release, so the file cannot change under
-  you. Each release lists the SHA-256 of the file.
-- Read a tool before you run it. Each tool has a read line. It shows the same
-  file from the repository, and it does not add to the run count.
+- Tool reads and prints. Tool that changes the PC shows a plan first and asks.
+- Tool sends no data off the PC. On failure, it prints a report link. Nothing
+  leaves unless you open the link and submit.
+- Windows PowerShell 5.1 and PowerShell 7.
+- Run line points to a fixed release. File cannot change under you. Release
+  notes list the SHA-256.
+- Read before you run. Each tool links its file below. A read does not add to
+  the run count.
 
 ## etch
 
-Etch **T**ags **C**omputers' **H**ostnames. Etch is a safe way to get a readable, unique hostname for a Windows PC.
-It reads the PC and prints the name. It never renames anything.
-
-    DSKASR6B-9SGCGT
-
-The name comes from the hardware, not from a sticker. The same PC gets the
-same name after a Windows reinstall.
-
-### Run
+Prints a stable, readable name for this PC. Never renames. Same PC, same name,
+also after a Windows reinstall. [Read etch.ps1](https://raw.githubusercontent.com/devinscodex/gtfm/etch-v1.0.0/etch.ps1)
 
     irm https://github.com/devinscodex/gtfm/releases/download/etch-v1.0.0/etch.ps1 | iex
 
-### Read
-
-    irm https://raw.githubusercontent.com/devinscodex/gtfm/etch-v1.0.0/etch.ps1 | more
-
-### Read a name
-
-    DSK  ASR  6  B  -  9SGCGT
-    |    |    |  |     |
-    |    |    |  |     ID: unique part
-    |    |    |  C: drive size
-    |    |    installed RAM
-    |    maker of the board
-    type of PC
+Name = TYPE MAKER RAM DISK - SIGNATURE. Example: `DSKASR6B-9SGCGT`.
 
 | Part | Meaning |
 |---|---|
-| Type | `DSK` desktop, `LAP` laptop, `TAB` tablet, `AIO` all-in-one, `MIN` mini PC, `SRV` server, `VIR` virtual machine |
-| Maker | `DEL` Dell, `HPI` HP, `LEN` Lenovo, `ASU` ASUS, `ASR` ASRock, `ACE` Acer, `MSI`, `GIG` Gigabyte, `MIC` Microsoft, `FRM` Framework, `APL` Apple, `SAM` Samsung, `TOS` Toshiba. Other makers use the first 3 letters. |
-| RAM, C: | One character each. The size is 2^n GB. `4` is 16 GB, `6` is 64 GB, `9` is 512 GB, `A` is 1 TB, `B` is 2 TB. |
-| ID | 6 characters. The SHA-256 of the BIOS serial, the UUID and the board serial. |
+| TYPE | `DSK` desktop, `LAP` laptop, `TAB` tablet, `AIO` all-in-one, `MIN` mini PC, `SRV` server, `VIR` virtual machine |
+| MAKER | `DEL` Dell, `HPI` HP, `LEN` Lenovo, `ASU` ASUS, `ASR` ASRock, `ACE` Acer, `MSI`, `GIG` Gigabyte, `MIC` Microsoft, `FRM` Framework, `APL` Apple, `SAM` Samsung, `TOS` Toshiba. Others: first 3 letters. |
+| RAM | Installed RAM as 2^n GB. `4` = 16 GB, `6` = 64 GB, `7` = 128 GB. |
+| DISK | Size of C: as 2^n GB, rounded up. `9` = 512 GB, `A` = 1 TB, `B` = 2 TB. |
+| SIGNATURE | 6 characters of the SHA-256 of the BIOS serial, UUID and board serial. No `I`, `L`, `O`, `U`. |
 
-Only the ID makes the name unique. The type, maker and sizes are hints. They
-go stale when you change the hardware. The ID does not.
+Only the SIGNATURE is unique. Other parts are hints. They go stale after a
+hardware change. The SIGNATURE does not.
 
-### How it works
+How it works:
 
-1. Etch reads the BIOS serial, the UUID and the board serial.
-2. It drops junk values such as `Default string` or `To Be Filled By O.E.M.`
-3. It hashes the good values together. If none are good, it uses the MAC
-   address of the first network card.
-4. It writes the first 30 bits of the hash as 6 characters. The alphabet has
-   no `I`, `L`, `O` or `U`.
-5. It asks the network if the name is in use. A warning means a clone or a
-   duplicate.
+1. Read BIOS serial, UUID, board serial.
+2. Drop junk such as `Default string` or `To Be Filled By O.E.M.`
+3. Hash the good values. If none are good, use the MAC of the first network card.
+4. Write the first 30 bits as 6 characters.
+5. Ask the network if the name is in use. A hit means a clone or duplicate.
 
-The second line of output names the sources. `BIOS+UUID+Board` is the best
-case. `MAC` means the PC has no good serial. Check it twice.
+Output line 2 names the sources. `BIOS+UUID+Board` is best. `MAC` means no good
+serial. Check twice.
 
-### Duplicates
+Limits:
 
-A random duplicate is rare. With 1,000 PCs the chance is 0.047%. With 5,000
-PCs it is 1.2%.
-
-Cloned images are the real risk. A clone has the same serial as its source and
-gets the same name. The duplicate check finds it only while both PCs are
-online.
-
-### Apply a name
-
-Etch does not rename the PC. To do it yourself, run this in an elevated
-shell, then restart:
-
-    Rename-Computer -NewName "DSKASR6B-9SGCGT" -Force
-
-### Limits
-
-- The RAM and C: characters round to the next power of two.
-- Soldered RAM and virtual disks can report odd sizes.
+- Chance of a random duplicate: 0.047% at 1,000 PCs, 1.2% at 5,000.
+- Cloned images are the real risk. A clone has the same serial and the same
+  name. The duplicate check sees it only while both PCs are online.
+- RAM and DISK round to a power of two. Soldered RAM and virtual disks can
+  report odd sizes.
+- To apply a name, run `Rename-Computer -NewName "<name>" -Force` in an
+  elevated shell. Then restart.
 - Tested on one desktop and one laptop.
 
 ## shed
 
-Shed **H**elps **E**mpty **D**isks. Shed frees disk space the Windows way. Shed is a **pre-release**. The file
-clearing code has run on test files. The restore point and DISM steps have
-not yet run end to end on a full PC. Read the plan before you answer `y`.
+Frees disk space the Windows way. **Pre-release.** The file-clearing code ran
+on test files. The restore point and DISM steps have not yet run end to end on
+a full PC. Read the plan before you answer `y`.
+[Read shed.ps1](https://raw.githubusercontent.com/devinscodex/gtfm/shed-v0.9.0/shed.ps1)
 
-### Run
-
-Open an elevated PowerShell. Any user can read the plan, but only an
-administrator can remove.
+Open an elevated PowerShell. Any user can see the plan. Only an administrator
+can remove.
 
     irm https://github.com/devinscodex/gtfm/releases/download/shed-v0.9.0/shed.ps1 | iex
 
-### Read
+Steps:
 
-    irm https://raw.githubusercontent.com/devinscodex/gtfm/shed-v0.9.0/shed.ps1 | more
+1. Print the plan: each item and the space it frees.
+2. Stop if a restart is pending or Windows Update is installing.
+3. Ask `(y/N)`. Default is no.
+4. Run `DISM /CheckHealth`. If the component store is damaged, stop. Nothing
+   changed.
+5. Take a restore point. Check that a new one exists. If not, stop. Nothing
+   removed.
+6. Clear the items. Print what it clears and what it frees.
+7. Run `DISM /StartComponentCleanup`. Takes 5 to 30 minutes.
+8. Print PASS or FAIL: restore point, component store, services, freed space.
 
-### What it does
+Removes: files over a day old in the user and Windows temp folders, Windows
+Update download cache, Delivery Optimization cache, error reports, crash dumps,
+Recycle Bin, unused component store files.
 
-1. It prints a plan: each item and the space it frees.
-2. It stops if a restart is pending or Windows Update is installing.
-3. It asks `(y/N)`. The default is no.
-4. It checks the component store with `DISM /CheckHealth`. If the store is
-   damaged, it stops and changes nothing.
-5. It takes a restore point and checks that a new one exists. If not, it
-   stops and removes nothing.
-6. It clears the items. It says what it clears and what it frees.
-7. It runs `DISM /StartComponentCleanup`. This takes 5 to 30 minutes.
-8. It prints PASS or FAIL for the restore point, the component store, the
-   services, and the freed space.
+Never touches: user documents, browser data, `Windows.old`. It reports the size
+of `Windows.old` and points to Settings. It skips links.
 
-### What it removes
+Limits:
 
-Files over a day old in the user and Windows temp folders, the Windows Update
-download cache, the Delivery Optimization cache, error reports, crash dumps,
-the Recycle Bin, and unused component store files.
-
-It never touches user documents, browser data or `Windows.old`. It reports the
-size of `Windows.old` and points to Settings. Links are skipped and never
-followed.
-
-### Limits
-
-- The DISM cleanup and the Recycle Bin cannot be undone. A restore point does
-  not bring back deleted caches.
+- DISM cleanup and Recycle Bin cannot be undone. A restore point does not
+  bring back deleted caches.
 - The health check matches an English DISM message. On other languages it
-  stops safely.
-- Run it again after a restart if it reports a pending restart.
+  stops, safely.
+- Pending restart: restart, then run again.
 
 ## Run counts
 
-The badge counts downloads of the release file. A run adds one. A read does
-not, because the read line uses the repository file. The count includes scans
-and the author's own tests. It does not count unique users.
-
-`stats/snapshot.sh` saves the counts with the date, so you can see the trend.
+Badge = downloads of the release file. A run adds one. A read does not.
+Includes scans and the author's tests. Not unique users.
+`stats/snapshot.sh` saves the counts with the date, for trends.
 
 ## License
 

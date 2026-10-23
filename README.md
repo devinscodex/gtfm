@@ -5,7 +5,7 @@ runs with one line.
 
 | Tool | Does | Changes the PC | Runs |
 |---|---|---|---|
-| [etch](#etch) | Prints a stable name for the PC | No | ![](https://img.shields.io/github/downloads/devinscodex/gtfm/etch-v1.0.0/etch.ps1?label=runs&color=lightgrey) |
+| [etch](#etch) | A safe way to get a readable, unique hostname | No | ![](https://img.shields.io/github/downloads/devinscodex/gtfm/etch-v1.0.0/etch.ps1?label=runs&color=lightgrey) |
 
 ## Rules
 
@@ -19,7 +19,8 @@ runs with one line.
 
 ## etch
 
-Etch prints a stable name for a Windows PC.
+Etch is a safe way to get a readable, unique hostname for a Windows PC.
+It reads the PC and prints the name. It never renames anything.
 
     DSKASR6B-9SGCGT
 

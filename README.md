@@ -5,8 +5,8 @@ runs with one line.
 
 | Tool | Does | Changes the PC | Runs |
 |---|---|---|---|
-| [etch](#etch) | A safe way to get a readable, unique hostname | No | ![](https://img.shields.io/github/downloads/devinscodex/gtfm/etch-v1.0.0/etch.ps1?label=runs&color=lightgrey) |
-| [shed](#shed) (pre-release) | Frees disk space after a restore point and a health check | Yes, after you answer `y` | ![](https://img.shields.io/github/downloads/devinscodex/gtfm/shed-v0.9.0/shed.ps1?label=runs&color=lightgrey) |
+| [etch](#etch) | **E**tch **T**ags **C**omputers' **H**ostnames. A safe way to get a readable, unique hostname | No | ![](https://img.shields.io/github/downloads/devinscodex/gtfm/etch-v1.0.0/etch.ps1?label=runs&color=lightgrey) |
+| [shed](#shed) (pre-release) | **S**hed **H**elps **E**mpty **D**isks. Frees disk space after a restore point and a health check | Yes, after you answer `y` | ![](https://img.shields.io/github/downloads/devinscodex/gtfm/shed-v0.9.0/shed.ps1?label=runs&color=lightgrey) |
 
 ## Rules
 
@@ -22,7 +22,7 @@ runs with one line.
 
 ## etch
 
-Etch is a safe way to get a readable, unique hostname for a Windows PC.
+Etch **T**ags **C**omputers' **H**ostnames. Etch is a safe way to get a readable, unique hostname for a Windows PC.
 It reads the PC and prints the name. It never renames anything.
 
     DSKASR6B-9SGCGT
@@ -96,7 +96,7 @@ shell, then restart:
 
 ## shed
 
-Shed frees disk space the Windows way. Shed is a **pre-release**. The file
+Shed **H**elps **E**mpty **D**isks. Shed frees disk space the Windows way. Shed is a **pre-release**. The file
 clearing code has run on test files. The restore point and DISM steps have
 not yet run end to end on a full PC. Read the plan before you answer `y`.
 

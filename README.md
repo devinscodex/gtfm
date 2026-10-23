@@ -1,4 +1,4 @@
-# gtfm
+# gtfm: Green Team Field Manual
 
 Small PowerShell tools for Windows PCs. Each tool does one job. Each tool
 runs with one line.
